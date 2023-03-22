@@ -120,6 +120,7 @@ jobs:
         cd openwrt/bin/targets/*/*
         rm -rf packages
         rm -rf profiles.json
+        rm -rf *.buildinfo
         rm -rf *.manifest
         rm -rf *-kernel.bin
         rm -rf *-rootfs.img
