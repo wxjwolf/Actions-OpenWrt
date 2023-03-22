@@ -36,7 +36,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-20.04
-    container: node:16.16.0
 
     steps:
     - name: Checkout
@@ -160,7 +159,6 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        #echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
         echo "release_tag=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
         touch release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
