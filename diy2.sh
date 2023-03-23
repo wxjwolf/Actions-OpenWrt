@@ -19,4 +19,6 @@ sed -i 's/luci-theme-bootstrap/luci-theme-argon/' feeds/luci/collections/luci/Ma
 #修改默认root登录samba
 sed -i 's/invalid users = root/#invalid users = root/g' feeds/packages/net/samba4/files/smb.conf.template
 
+#添加luci-app-adguardhome
+git clone https://github.com/nhyoungboy/luci-app-adguardhome.git package/luci-app-adguardhome
 
