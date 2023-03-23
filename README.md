@@ -8,4 +8,4 @@ Build OpenWrt using GitHub Actions
 
 [Read the details in my blog (in Chinese) | 中文教程](https://p3terx.com/archives/build-openwrt-with-github-actions.html)
 
-.config #lean基础上增加luci-app-alist，luci-app-adguardhome,替换argon主题和argon-config
+.config diy2.sh#lean基础上增加luci-app-alist，luci-app-adguardhome,替换argon主题和argon-config
