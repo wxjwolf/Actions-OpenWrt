@@ -12,3 +12,6 @@ sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generat
 
 #修改默认root登录samba
 sed -i 's/invalid users = root/#invalid users = root/g' feeds/packages/net/samba4/files/smb.conf.template
+
+#修改dhcp.sh,软路由IPTV验证登录
+sed -i $'s/${vendorid:+-V \"$vendorid\"}/-V \'\'/' package/network/config/netifd/files/lib/netifd/proto/dhcp.sh
