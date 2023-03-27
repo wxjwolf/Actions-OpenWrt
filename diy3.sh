@@ -18,3 +18,6 @@ sed -i 's/invalid users = root/#invalid users = root/g' feeds/packages/net/samba
 
 #修改dhcp.sh,软路由IPTV验证登录
 sed -i $'s/${vendorid:+-V \"$vendorid\"}/-V \'\'/' package/network/config/netifd/files/lib/netifd/proto/dhcp.sh
+
+# 修改“固件版本”，增加时间Build 2023.03.27 @ OpenWrt 
+sed -i "s/OpenWrt /Build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" package/lean/default-settings/files/zzz-default-settings
