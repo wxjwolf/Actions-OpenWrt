@@ -9,3 +9,9 @@ Build OpenWrt using GitHub Actions
 [Read the details in my blog (in Chinese) | 中文教程](https://p3terx.com/archives/build-openwrt-with-github-actions.html)
 
 .config diy3.sh#lean基础上增加luci-app-alist，luci-app-adguardhome,argonne主题和argonne-config
+
+主要配置文件和项目：
+.config_lean
+diy3.sh
+
+![image](https://user-images.githubusercontent.com/70838099/229037749-276ba03c-53d4-4c04-8312-39037f4497d3.png)
