@@ -21,3 +21,6 @@ sed -i $'s/${vendorid:+-V \"$vendorid\"}/-V \'\'/' package/network/config/netifd
 
 # 修改“固件版本”，增加时间Build 2023.03.27 @ OpenWrt 
 sed -i "s/OpenWrt /Build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" package/lean/default-settings/files/zzz-default-settings
+
+#增加lan桥接端口
+sed -i "s/exit 0/uci set network.lan.ifname=\'eth0 eth2\'\nuci commit network\nexit 0/" package/lean/default-settings/files/zzz-default-settings
