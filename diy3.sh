@@ -30,3 +30,6 @@ sed -i "s/OpenWrt /Build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" package/lean
 
 #增加lan桥接端口
 sed -i "s/exit 0/uci set network.lan.ifname=\'eth0 eth2\'\nuci commit network\nexit 0/" package/lean/default-settings/files/zzz-default-settings
+
+#修改主页显示时间格式
+sed -i 's/os.date()/os.date(\"%Y年%m月%d日 %X\")/' package/feeds/luci/luci-mod-admin-full/luasrc/view/admin_status/index.htm
