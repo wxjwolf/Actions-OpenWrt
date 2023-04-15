@@ -5,8 +5,8 @@ git clone https://github.com/sbwml/packages_lang_golang -b 19.x feeds/packages/l
 git clone https://github.com/sbwml/luci-app-alist package/alist
 
 #替换luci-theme-argon和luci-app-argon-config
-#rm -rf feeds/luci/themes/luci-theme-argon
-#git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git feeds/luci/themes/luci-theme-argon
+rm -rf feeds/luci/themes/luci-theme-argon
+git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git feeds/luci/themes/luci-theme-argon
 #rm -rf feeds/luci/applications/luci-app-argon-config
 #git clone https://github.com/jerrykuku/luci-app-argon-config.git feeds/luci/applications/luci-app-argon-config
 
