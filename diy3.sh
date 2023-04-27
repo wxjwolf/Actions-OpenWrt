@@ -11,7 +11,7 @@ git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git feeds/luci/
 #git clone https://github.com/jerrykuku/luci-app-argon-config.git feeds/luci/applications/luci-app-argon-config
 
 # 更改内核版本
-#sed -i 's#^.*KERNEL_PATCHVER:=.*$#KERNEL_PATCHVER:=5.15#' target/linux/x86/Makefile
+#sed -i 's#^.*KERNEL_PATCHVER:=.*$#KERNEL_PATCHVER:=6.1#' target/linux/x86/Makefile
 
 #修改默认登录地址：192.168.2.1
 sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
