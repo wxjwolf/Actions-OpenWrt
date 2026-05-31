@@ -1,23 +1,20 @@
 #!/bin/bash
-#
-# Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
-#
-# This is free software, licensed under the MIT License.
-# See /LICENSE for more information.
-#
-# https://github.com/P3TERX/Actions-OpenWrt
-# File name: diy-part1.sh
-# Description: OpenWrt DIY script part 1 (Before Update feeds)
-#
+echo "======== diy-part1.sh 开始执行 ========"
 
-# Uncomment a feed source
-#sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
+# 修改默认 IP 为 192.168.2.2
+sed -i 's/192.168.1.1/192.168.2.2/g' package/base-files/files/bin/config_generate
 
-# Add a feed source
-#sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
-#sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
-#sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
-sed -i '$a src-git helloworld https://github.com/fw876/helloworld.git' feeds.conf.default
-sed -i '$a src-git mydiy https://github.com/wxjwolf/myopenwrt.git' feeds.conf.default
+# 更换为 Argon 主题
+sed -i 's/luci-theme-bootstrap/luci-theme-argon/' feeds/luci/collections/luci/Makefile
 
+# Samba 允许 root 登录
+sed -i 's/invalid users = root/#invalid users = root/g' feeds/packages/net/samba4/files/smb.conf.template
 
+# 添加 ssr-plus feed
+echo "src-git helloworld https://github.com/fw876/helloworld.git" >> feeds.conf.default
+
+# 更新 feed
+./scripts/feeds update -a
+./scripts/feeds install -a
+
+echo "======== diy-part1.sh 执行完成 ========"
