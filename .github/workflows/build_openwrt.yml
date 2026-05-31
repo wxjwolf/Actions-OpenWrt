@@ -47,7 +47,7 @@ jobs:
       - name: Import Config
         run: |
           cd openwrt
-          cp ../.config .config
+          cp ./.config .config
           make defconfig
 
       - name: Run diy-part2.sh
