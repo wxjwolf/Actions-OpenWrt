@@ -14,7 +14,13 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-
+      - name: Free Disk Space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          df -h
       # ==================== 关键：安装编译依赖 ====================
       - name: Install Build Dependencies
         run: |
@@ -36,7 +42,11 @@ jobs:
           repository: ${{ env.OPENWRT_REPO }}
           ref: ${{ env.OPENWRT_BRANCH }}
           path: openwrt
-
+      - name: Update Feeds
+        run: |
+          cd openwrt
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
       - name: Run diy-part1.sh
         run: |
           cp ./diy-part1.sh openwrt/
