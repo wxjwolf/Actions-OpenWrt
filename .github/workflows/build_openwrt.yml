@@ -39,7 +39,7 @@ jobs:
 
       - name: Run diy-part1.sh
         run: |
-          cp ../diy-part1.sh openwrt/
+          cp ./diy-part1.sh openwrt/
           cd openwrt
           chmod +x diy-part1.sh
           ./diy-part1.sh
@@ -52,7 +52,7 @@ jobs:
 
       - name: Run diy-part2.sh
         run: |
-          cp ../diy-part2.sh openwrt/
+          cp ./diy-part2.sh openwrt/
           cd openwrt
           chmod +x diy-part2.sh
           ./diy-part2.sh
