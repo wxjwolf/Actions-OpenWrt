@@ -1,13 +1,11 @@
-name: Build OpenWrt (Official + x86 Legacy)
+name: Build OpenWrt (Official + x86 Legacy + rootfs)
 
 on:
-  workflow_dispatch:    # 手动触发
-  #schedule:
-   # - cron: '0 18 * * *'  # 每天北京时间凌晨2点（可选）
+  workflow_dispatch:
 
 env:
   OPENWRT_REPO: https://github.com/openwrt/openwrt.git
-  OPENWRT_BRANCH: openwrt-25.12                  # 或指定 v25.12.x 等稳定分支
+  OPENWRT_BRANCH: openwrt-25.12
   TARGET: x86
   SUBTARGET: legacy
 
@@ -17,18 +15,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # ==================== 关键：安装编译依赖 ====================
+      - name: Install Build Dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y \
+            build-essential clang flex g++ gawk \
+            gcc-multilib g++-multilib gettext git \
+            libncurses5-dev libssl-dev python3-distutils \
+            rsync unzip zlib1g-dev file wget \
+            asciidoc binutils bzip2 util-linux help2man \
+            intltool libelf-dev make patch perl-modules \
+            python3-dev xsltproc qemu-utils libglib2.0-dev \
+            libgtk2.0-dev libpcre3-dev liblzma-dev \
+            libxml-parser-perl
+
       - name: Checkout OpenWrt Source
         uses: actions/checkout@v4
         with:
           repository: ${{ env.OPENWRT_REPO }}
           ref: ${{ env.OPENWRT_BRANCH }}
           path: openwrt
-
-      - name: Update & Install Feeds
-        run: |
-          cd openwrt
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a
 
       - name: Run diy-part1.sh
         run: |
@@ -53,12 +60,12 @@ jobs:
       - name: Download Packages
         run: cd openwrt && make download -j$(nproc)
 
-      - name: Compile
+      - name: Compile OpenWrt
         run: cd openwrt && make -j$(nproc) V=s
 
       - name: Upload rootfs.tar.gz
         uses: actions/upload-artifact@v4
         with:
-          name: OpenWrt-rootfs
+          name: OpenWrt-x86-legacy-rootfs
           path: openwrt/bin/targets/x86/legacy/*rootfs.tar.gz
           retention-days: 30
