@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  OPENWRT_REPO: https://github.com/openwrt/openwrt.git
+  OPENWRT_REPO: openwrt/openwrt
   OPENWRT_BRANCH: openwrt-25.12
   TARGET: x86
   SUBTARGET: legacy
