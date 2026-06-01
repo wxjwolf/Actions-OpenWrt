@@ -1,5 +1,5 @@
 #!/bin/bash
-# diy-part1.sh - 编译前的定制脚本（精简版）
+# diy-part1.sh - 编译前的定制脚本
 
 echo "=========================================="
 echo "Starting diy-part1.sh (Pre-compile)"
@@ -9,18 +9,7 @@ echo "=========================================="
 echo "Adding SSR Plus feed..."
 echo "src-git helloworld https://github.com/fw876/helloworld.git" >> feeds.conf.default
 
-# 2. 更新所有 feeds
-echo "Updating feeds..."
-./scripts/feeds update -a
-./scripts/feeds install -a
-
-# 3. 修改默认 IP 地址
-echo "Changing default IP to 192.168.2.2..."
-sed -i 's/192.168.1.1/192.168.2.2/g' package/base-files/files/bin/config_generate
-
-# 4. 安装 SSR Plus
-echo "Installing SSR Plus..."
-./scripts/feeds install luci-app-ssr-plus
+# 提示：脚本内不需要再写一遍 feeds update/install，我们在工作流里统一处理
 
 echo "=========================================="
 echo "diy-part1.sh completed successfully"
