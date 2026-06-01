@@ -84,9 +84,6 @@ jobs:
       - name: Upload OpenWrt Image
         uses: actions/upload-artifact@v4
         with:
-          name: OpenWrt-x86-64-Images
-          # 改变这里的 path，用 * 匹配所有镜像格式
-          path: |
-            openwrt/bin/targets/x86/64/*.img.gz
-            openwrt/bin/targets/x86/64/*.img
+          name: OpenWrt-x86-64-Combined-Image
+          path: openwrt/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz
           retention-days: 30
