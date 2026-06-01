@@ -1,47 +1,46 @@
-# OpenWrt 自动编译（x86 Legacy - 精简版）
+# OpenWrt x86_64 旁路由固件 (基于官方原版 + HomeProxy)
 
-基于 GitHub Actions 的 OpenWrt 自动编译工作流，仅生成 rootfs.tar.gz。
+这是一个基于 OpenWrt 官方最新源码（分支：`openwrt-25.12`）编译的纯净、高效的 x86_64 固件。专为 **Proxmox VE (PVE)** 等虚拟化平台打造，出厂即开箱即用，完美适配旁路由（网关）场景。
 
-## 功能特性
+## 🚀 固件核心特性
 
-- ✅ 编译 x86 Legacy (32位) 版本
-- ✅ **仅生成 rootfs.tar.gz**（适用于 Docker/LXC/PVE CT）
-- ✅ 集成 LuCI Web 界面
-- ✅ 集成 SSR Plus（科学上网）
-- ✅ 默认 IP: 192.168.2.2
-- ✅ 默认关闭 DHCP
-- ✅ 中文界面
+- **现代架构**：原生拥抱官方 `nftables` 防火墙架构，相比传统 `iptables` 效率更高、延迟更低。
+- **顶级代理**：集成新一代 **HomeProxy** 插件，底层由全能核心 **sing-box** 驱动，原生支持 Hysteria 2、TUIC v5、Vless-Reality 等现代协议。
+- **极致纯净**：除 LuCI 汉化、HomeProxy 及必要的基础工具（`curl`, `nano`）外，无任何第三方多余插件，保持系统极致稳定。
+- **旁路由网络优化**：
+  - 默认关闭 LAN 口 DHCP 服务，绝不与主路由冲突。
+  - 默认后台语言为 **简体中文**。
 
-## 使用方法
+## 🌐 默认网络配置 (开箱即用)
 
-### 1. Fork 本仓库
+编译完成后，固件的默认网络参数已自动注入，无需控制台盲改：
 
-点击 GitHub 右上角的 Fork 按钮
+| 参数 | 默认设置 | 说明 |
+| :--- | :--- | :--- |
+| **后台管理 IP** | `192.168.2.2` | 浏览器直接输入此 IP 即可进入 LuCI 界面 |
+| **默认子网掩码** | `255.255.255.0` | `/24` 网段 |
+| **默认网关** | `192.168.2.1` | 自动指向你的主路由 IP |
+| **默认 DNS** | `192.168.2.1` | 确保 OpenWrt 自身和插件规则能正常联网更新 |
+| **默认密码** | *无* | 首次登录请直接点击登录并自行修改 |
 
-### 2. 触发编译
+## 📦 编译输出文件说明
 
-- **手动触发**: Actions → Build OpenWrt → Run workflow
-- **自动触发**: 每天北京时间凌晨 2 点
+本仓库通过 GitHub Actions 自动化编译，最终在 Actions 页面输出的 Artifacts 仅保留最核心的物理镜像：
 
-### 3. 下载文件
+- **`openwrt-x86-64-generic-squashfs-combined.img.gz`**
+  - **引导模式**：Legacy / BIOS 传统引导（虚拟机推荐，兼容性最佳）。
+  - **分区格式**：`squashfs` 只读压缩格式（支持恢复出厂设置，在控制台输入 `firstboot -y && reboot` 即可一键还原）。
+  - **分区大小**：系统分区已调整为 **512MB**，为 HomeProxy 缓存和规则留足空间。
 
-编译完成后下载：
-- `openwrt-rootfs.tar.gz` - rootfs 文件（约 200-300MB）
-- `build-config` - 编译配置文件
+## 🛠️ PVE 虚拟机快速部署指南
 
-## Docker 使用方法
-
-```bash
-# 1. 导入镜像
-zcat openwrt-rootfs.tar.gz | docker import - openwrt:x86-legacy
-
-# 2. 运行容器
-docker run -d \
-  --name openwrt \
-  --privileged \
-  --network host \
-  --restart unless-stopped \
-  openwrt:x86-legacy /sbin/init
-
-# 3. 进入容器
-docker exec -it openwrt /bin/bash
+1. **下载固件**：在 GitHub Actions 页面下载 `OpenWrt-x86-64-Combined-Image`，解压得到 `.img` 文件。
+2. **创建虚拟机**：在 PVE 中创建一个新虚拟机：
+   - **OS**：选择“不使用任何介质”。
+   - **系统**：机型选择 `q35` 或 `i440fx`，引导选择 `Default` (BIOS)。
+   - **硬盘**：创建后直接**删除**自带的默认硬盘。
+   - **网络**：网卡选择 `VirtIO (半虚拟化)` 以获取最高性能。
+3. **导入镜像**：通过 SSH 登录 PVE 宿主机，将 `.img` 文件上传后执行以下命令导入（假设虚拟机 ID 为 `101`，存储盘为 `local-lvm`）：
+   ```bash
+   qm importdisk 101 openwrt-x86-64-generic-squashfs-combined.img local-lvm
+4. 启动配置：在 PVE 虚拟机 101 的 设置 -> 引导顺序 中，勾选新导入的硬盘并将其拖动到第一位，保存后开机即可。
