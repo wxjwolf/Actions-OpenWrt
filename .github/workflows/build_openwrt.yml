@@ -73,9 +73,9 @@ jobs:
       - name: Compile OpenWrt
         run: cd openwrt && make -j$(nproc) V=s
 
-      - name: Upload rootfs.tar.gz
+      - name: Upload OpenWrt Image
         uses: actions/upload-artifact@v4
         with:
-          name: OpenWrt-x86-legacy-rootfs
-          path: openwrt/bin/targets/x86/legacy/*rootfs.tar.gz
+          name: OpenWrt-x86-64-Combined-Image
+          path: openwrt/bin/targets/x86/64/*combined-squashfs.img.gz
           retention-days: 30
