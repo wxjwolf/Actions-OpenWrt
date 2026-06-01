@@ -1,4 +1,4 @@
-name: Build OpenWrt (Official + x86 Legacy + rootfs)
+name: Build OpenWrt (Official + x86_64 + SSR Plus)
 
 on:
   workflow_dispatch:
@@ -7,13 +7,14 @@ env:
   OPENWRT_REPO: openwrt/openwrt
   OPENWRT_BRANCH: openwrt-25.12
   TARGET: x86
-  SUBTARGET: legacy
+  SUBTARGET: 64
 
 jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+
       - name: Free Disk Space
         run: |
           sudo rm -rf /usr/share/dotnet
@@ -21,7 +22,7 @@ jobs:
           sudo rm -rf "/usr/local/share/boost"
           sudo rm -rf "$AGENT_TOOLSDIRECTORY"
           df -h
-      # ==================== 关键：安装编译依赖 ====================
+
       - name: Install Build Dependencies
         run: |
           sudo apt-get update -qq
@@ -42,17 +43,20 @@ jobs:
           repository: ${{ env.OPENWRT_REPO }}
           ref: ${{ env.OPENWRT_BRANCH }}
           path: openwrt
-      - name: Update Feeds
-        run: |
-          cd openwrt
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a
+
+      # 先运行 diy-part1 写入第三方源，然后再统一进行 feeds 更新和安装
       - name: Run diy-part1.sh
         run: |
           cp ./diy-part1.sh openwrt/
           cd openwrt
           chmod +x diy-part1.sh
           ./diy-part1.sh
+
+      - name: Update and Install Feeds
+        run: |
+          cd openwrt
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
 
       - name: Import Config
         run: |
