@@ -1,7 +1,9 @@
-### 1. 预安装的软件包
+### 1. 定制网址
+<pre><code>https://firmware-selector.immortalwrt.org/</code></pre>pre>
+### 2. 预安装的软件包
 <pre><code>apk-openssl autocore base-files ca-bundle curl default-settings-chn dnsmasq-full dropbear firewall4 grub2-bios-setup kmod-button-hotplug kmod-nf-nathelper kmod-nft-offload kmod-vmxnet3 libc libgcc libustream-openssl logd luci nano netifd nftables procd-ujail uci uclient-fetch urandom-seed urngd luci-app-homeproxy luci-i18n-homeproxy-zh-cn sing-box</code></pre>
 
-### 2. 首次启动脚本 (uci-defaults)
+### 3. 首次启动脚本 (uci-defaults)
 ```bash
 # 1. 基础参数定义 (完美适配 25.12+ 的 CIDR 格式)
 lan_ip_address="192.168.2.2/24"   # 包含 255.255.255.0 子网掩码
